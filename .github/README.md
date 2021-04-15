@@ -1,19 +1,15 @@
 # rg_evaluation
 Research Group - Evaluation
 
+[![Python application](https://github.com/TheSoundOfAIOSR/rg_evaluation/actions/workflows/python-app.yml/badge.svg)](https://github.com/TheSoundOfAIOSR/rg_evaluation/actions/workflows/python-app.yml)
+
 ## Flask App for the survey:
 
-> `main.py` handles the Python survey app (written in Flask) 
+> `run.py` handles the Python survey app (written in Flask) 
 
 ## Streamlit App
 
 > `streamlit run dashboard.py` runs the streamlit app
-
-## To do:
-
-1.  Connect `main.py` app storing it database using PyMySQL.
-2.  Make the app "prettier." Feel free to work some .css magic.
-3.  Update survey questions under `surveydata.py`.
 
 ## PyMySQL rundown
 

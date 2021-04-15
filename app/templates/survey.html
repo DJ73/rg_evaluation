@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="{{ url_for('static',filename='css/bootstrap.min.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="{{ url_for('static',filename='css/survey.css') }}"
+		/>
+		<title>Sound of AI Survey Questions</title>
+		<link rel="preconnect" href="https://fonts.gstatic.com" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@700&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+
+	<body style="font-family: 'El Messiri', sans-serif">
+		<div class="container pt-3 my-3 text-white">
+			<h1 class="text-center my-4">Sound of AI Survey Questions</h1>
+			<hr class="style-seven" />
+
+			<form action="/responsedata" method="POST" name="mainform">
+				{% set qno = namespace(value=0) %}
+				{% for key, value in data.items() %}
+					{% if key == "survey_rating_questions" %}
+						{% for question in value %}
+							<div class="p-5 mb-5 question" id="question_container_{{ qno.value }}">
+								<h3 class="my-3 ml-1">{{ question["question"] }}</h3>
+								{% for option in question["attribute"]["field"] %}
+								<div class="option">
+									<input
+										type="radio"
+										name="{{ question['attribute']['identifier'] }}"
+										value="{{ option }}"
+										id="{{ question['attribute']['identifier'] }}-{{loop.index}}"
+									/>
+									<label for="{{ question['attribute']['identifier'] }}-{{loop.index}}" onclick="scrollToId('#question_container_{{ (qno.value+1) }}');">
+										<span></span>
+										{{ option }}
+									</label>
+								</div>
+								{% endfor %}
+							</div>
+							{% set qno.value = qno.value + 1 %}
+						{% endfor %}
+					{% elif key == "survey_comments_questions" %}
+						{% for question in value %}
+							<div class="p-5 mb-5 question" id="question_container_{{ qno.value }}">
+								<h3 class="my-3 ml-1">{{ question["question"] }}</h3>
+								<textarea
+									name="{{ question['attribute']['identifier'] }}"
+									id="{{ question['attribute']['identifier'] }}"
+									rows="5"
+									cols="80"
+								></textarea>
+							</div>
+							{% set qno.value = qno.value + 1 %}
+						{% endfor %}
+					{% elif key == "turing_test_sound_comparisons" %}
+						
+						<h1 class="text-center">Turing Test!</h1>
+
+						<p class="text-center">
+							For these questions, listen to both audio samples and decide
+							which one sounds like a human made it.
+						</p>
+
+						{% for question in value %}
+							{% set outer_loop = loop %}
+							<div class="p-5 mb-5 question" id="question_container_{{ qno.value }}">
+								<h3 class="my-3 ml-1">{{ question["question"] }}</h3>
+								{% for option in question["attribute"]["field"] %}
+			
+								<div class="option">
+									<input
+										type="radio"
+										name="{{ question['attribute']['identifier'] }}"
+										value="{{ option }}"
+										id="{{ question['attribute']['identifier'] }}-{{loop.index}}"
+									/>
+									<label for="{{ question['attribute']['identifier'] }}-{{loop.index}}" 
+										{% if not outer_loop.last %}
+											onclick="scrollToId('#question_container_{{ (qno.value+1) }}');"
+										{% endif %}
+									>
+										<span></span>
+										<audio
+											controls
+											controlsList="nodownload"
+											src="/static/audio/{{ question['attribute']['fileName'][loop.index-1] }}"
+											preload="auto"
+										></audio>
+									</label>
+								</div>
+								{% endfor %}
+							</div>
+
+							{% set qno.value = qno.value + 1 %}
+						{% endfor %}
+					{% endif %}
+				{% endfor %}
+
+				<input
+					type="submit"
+					value="Submit"
+					class="d-block mx-auto rounded-lg"
+					id="submit-button"
+				/>
+
+			</form>
+		</div>
+		<script src="{{ url_for('static',filename='js/jquery.js') }}"></script>
+		<script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>
+		<script>
+			
+				function scrollToId(id) {
+					$("html, body").animate(
+						{
+							scrollTop: $(id).offset().top,
+						},
+						2000
+					);
+				}
+			
+		</script>
+	</body>
+</html>
