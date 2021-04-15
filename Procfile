@@ -1,1 +1,1 @@
-web:gunicorn main:run_survey.py
+web:gunicorn run_survey:app
